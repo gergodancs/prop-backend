@@ -11,7 +11,7 @@ export type Picture = {
 };
 
 export type Property = {
-    position: Position;
+    position: string;
     district?: number;
     city: string;
     country: string;
