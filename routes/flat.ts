@@ -3,15 +3,13 @@ import {pool} from "../db";
 import {authenticateToken} from "../midlewares/auth";
 import {parsePictures, upload} from "../midlewares/upload";
 import {Property} from "../model/dto";
-import {FlatService} from "../services/flat-service";
-
+const FlatService = require('../services/flat-service');
 const router = express.Router();
-const flatService = new FlatService();
 
 
-router.post('/rent', authenticateToken, upload.array('pictures', 10), async (req: any, res: any) => {
+router.post('/rent', authenticateToken, upload.array('pictures', 10), async (req, res) => {
     try {
-        const newFlat = await flatService.saveNewFlatForRent(req);
+        const newFlat = await FlatService.saveFlatForRent(req);
         res.json(newFlat);
     } catch (err) {
         console.error(err.message);
@@ -19,10 +17,9 @@ router.post('/rent', authenticateToken, upload.array('pictures', 10), async (req
     }
 });
 
-
-router.post('/sale', authenticateToken, upload.array('pictures', 10), async (req: any, res) => {
+router.post('/sale', authenticateToken, upload.array('pictures', 10), async (req, res) => {
     try {
-        const newFlat = await flatService.saveFlatForSale(req)
+        const newFlat = await FlatService.saveFlatForSale(req);
         res.json(newFlat);
     } catch (err) {
         console.error(err.message);

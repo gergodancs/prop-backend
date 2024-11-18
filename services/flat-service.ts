@@ -1,22 +1,46 @@
-import {Position, Property} from "../model/dto";
-import {parsePictures} from "../midlewares/upload";
-import {pool} from "../db";
-import {FlatForRentRepository} from "../repository/flat-for-rent-repository"
+const { parsePictures } = require('../midlewares/upload');
+const FlatRepository = require('../repositories/flat-repository');
+import Flat from '../model/flat';
 
-export class FlatService {
+const saveFlatForRent = async (req) => {
+    const pictures = JSON.stringify(parsePictures(req.files));
+    const newFlat = new Flat(
+        null,
+        req.user.userId,
+       JSON.stringify(req.body.position),
+        req.body.district,
+        req.body.city,
+        req.body.country,
+        req.body.title,
+        req.body.shortDescription,
+        req.body.description,
+        req.body.price,
+        req.body.email,
+        pictures
+    );
+    return await FlatRepository.saveFlatForRentRepo(newFlat);
+};
 
-    private flatForRentRepository = new FlatForRentRepository();
+const saveFlatForSale = async (req) => {
+    const pictures = JSON.stringify(parsePictures(req.files));
+    const newFlat = new Flat(
+        null,
+        req.user.userId,
+        JSON.stringify(req.body.position),
+        req.body.district,
+        req.body.city,
+        req.body.country,
+        req.body.title,
+        req.body.shortDescription,
+        req.body.description,
+        req.body.price,
+        req.body.email,
+        pictures
+    );
+    return await FlatRepository.saveFlatForSaleRepo(newFlat);
+};
 
-    public async saveNewFlatForRent(req: any): Promise<Property> {
-        const pictures = JSON.stringify(parsePictures(req.files));
-        const newFlat = await this.flatForRentRepository.saveNewFlatForRent(req, pictures);
-        return newFlat.rows[0];
-    }
-
-    public async saveFlatForSale(req: any):Promise<Property> {
-        const pictures = JSON.stringify(parsePictures(req.files));
-        const result = await this.flatForRentRepository.saveFlatForSale(req, pictures);
-        return result.rows[0];
-        }
-
-}
+module.exports = {
+    saveFlatForRent,
+    saveFlatForSale
+};
