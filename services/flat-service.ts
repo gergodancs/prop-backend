@@ -7,7 +7,7 @@ const saveFlatForRent = async (req) => {
     const newFlat = new Flat(
         null,
         req.user.userId,
-       JSON.stringify(req.body.position),
+        req.body.position,
         req.body.district,
         req.body.city,
         req.body.country,
@@ -26,7 +26,7 @@ const saveFlatForSale = async (req) => {
     const newFlat = new Flat(
         null,
         req.user.userId,
-        JSON.stringify(req.body.position),
+        req.body.position,
         req.body.district,
         req.body.city,
         req.body.country,
